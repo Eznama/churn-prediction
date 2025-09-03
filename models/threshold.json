@@ -1,0 +1,8 @@
+{
+  "model": "logistic_regression",
+  "threshold": 0.5399999999999999,
+  "created_utc": "2025-09-03T17:32:17Z",
+  "python": "3.12.4",
+  "sklearn": "1.7.1",
+  "n_features": 45
+}
