@@ -1,0 +1,37 @@
+name: ci
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Smoke test CLI (safe)
+        run: |
+          python src/predict.py --input samples/customer_safe.json --out outputs/ci_safe.json
+          python - <<'PY'
+          import json; s=json.load(open('outputs/ci_safe.json'))
+          assert 'prob_churn' in s and 'churn_pred' in s
+          print("safe ?", s)
+          PY
+
+      - name: Smoke test CLI (risky)
+        run: |
+          python src/predict.py --input samples/customer_risky.json --out outputs/ci_risky.json
+          python - <<'PY'
+          import json; r=json.load(open('outputs/ci_risky.json'))
+          assert 'prob_churn' in r and 'churn_pred' in r
+          print("risky ?", r)
+          PY
