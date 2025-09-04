@@ -11,3 +11,7 @@ data/raw/*
 !models/logistic_pipeline.joblib
 
 !models/threshold.json
+
+!models/logistic_pipeline.joblib
+
+!models/threshold.json
