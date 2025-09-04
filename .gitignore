@@ -5,3 +5,5 @@ __pycache__/
 models/*.joblib
 data/raw/*
 !.gitkeep
+
+!models/logistic_pipeline.joblib
