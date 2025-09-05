@@ -8,3 +8,6 @@ fastapi
 
 uvicorn[standard]
 streamlit==1.37.1
+
+streamlit==1.37.1
+requests>=2.31.0
