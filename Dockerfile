@@ -1,0 +1,9 @@
+﻿FROM python:3.12-slim
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+COPY . .
+ENV PYTHONUNBUFFERED=1
+EXPOSE 8000
+# Use python -m to avoid PATH issues for the uvicorn entrypoint.
+CMD ["python","-m","uvicorn","src.api:app","--host","0.0.0.0","--port","8000"]
