@@ -34,7 +34,11 @@ churn-prediction/
 
 ---
 
-## Quickstart
+## Quickstart (Local Demo)
+
+### Start the API (pulls the public Docker image)
+```bash
+docker run -d --name churn-api -p 8010:8000 eznama/churn-api:v0.3
 
 > **Windows PowerShell**
 
@@ -165,17 +169,48 @@ The CLI always loads these; artifacts are committed so CI can run.
 
 ---
 
-## What’s next
+## Local Demo (API + Dashboard)
 
-* Hyperparameter tuning (LogReg C/penalty, RF/GBM).
-* Probability calibration (Platt or isotonic); cost-based thresholding.
-* Add SHAP explanations to `reports/`.
-* Package the CLI (`entry_points`) or expose a FastAPI service.
-* Containerize and add a lightweight deploy workflow.
+### Prereqs
+- Docker Desktop
+- Python 3.10+ (3.12 recommended)
+- PowerShell (Windows) or a shell (macOS/Linux)
+
+### 1) Start the API (Docker)
+```powershell
+docker rm -f churn-api 2>$null
+docker run -d --name churn-api -p 8010:8000 eznama/churn-api:v0.3
+
+Health check:
+
+Invoke-RestMethod http://127.0.0.1:8010/health
+
+### 2) Start the Streamlit dashboard
+
+python -m pip install --upgrade pip
+pip install -r requirements.txt
+python -m streamlit run .\streamlit_app.py --server.port 8501
+
+Open: http://localhost:8501
+
+Click Check API health, then Send risky sample / Send safe sample.
+You can also paste/edit JSON and click Predict with JSON above.
+
+Troubleshooting
+
+If port 8010 is busy: docker rm -f churn-api then re-run the docker run command.
+
+If streamlit isn’t found: always use python -m streamlit ....
+
+If samples error with encoding, re-pull the repo or ensure the two JSON files are saved as UTF-8 (no BOM).
+
+
+## 3) One-click scripts
+- Start everything: `./start.ps1`
+- Stop API container: `./stop.ps1`
 
 ---
 
 ## License
 
-MIT (or your preferred license).
-
+MIT
